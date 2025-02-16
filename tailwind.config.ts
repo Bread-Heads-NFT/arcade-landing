@@ -1,6 +1,6 @@
 import type { Config } from "tailwindcss";
 
-export default {
+const config: Config = {
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
@@ -8,11 +8,22 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        'press-start': ['var(--font-press-start)'],
+        'vt323': ['var(--font-vt323)'],
+      },
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        'neon-pink': 'var(--neon-pink)',
+        'neon-blue': 'var(--neon-blue)',
+        'neon-yellow': 'var(--neon-yellow)',
+      },
+      animation: {
+        'pulse': 'pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+        'flicker': 'flicker 2s infinite',
       },
     },
   },
   plugins: [],
-} satisfies Config;
+};
+
+export default config;

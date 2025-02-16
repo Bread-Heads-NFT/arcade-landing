@@ -1,101 +1,176 @@
+'use client';
+
 import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+
+const games = [
+  {
+    title: "Game 1",
+    description: "Coming Soon",
+    imageUrl: "/placeholder.png",
+    comingSoon: true
+  },
+  {
+    title: "Game 2",
+    description: "Coming Soon",
+    imageUrl: "/placeholder.png",
+    comingSoon: true
+  },
+  {
+    title: "Game 3",
+    description: "Coming Soon",
+    imageUrl: "/placeholder.png",
+    comingSoon: true
+  },
+];
+
+// Background Glow Component
+const BackgroundGlow = () => {
+  const [glowPositions, setGlowPositions] = useState([
+    { top: '20%', left: '15%', color: 'bg-neon-purple', size: 'w-48 h-48' },
+    { top: '60%', left: '75%', color: 'bg-neon-blue', size: 'w-64 h-64' },
+    { top: '40%', left: '60%', color: 'bg-neon-pink', size: 'w-40 h-40' },
+    { top: '80%', left: '25%', color: 'bg-neon-yellow', size: 'w-56 h-56' },
+    { top: '10%', left: '85%', color: 'bg-neon-green', size: 'w-32 h-32' },
+    { top: '30%', left: '45%', color: 'bg-neon-pink', size: 'w-72 h-72' },
+    { top: '70%', left: '35%', color: 'bg-neon-blue', size: 'w-36 h-36' },
+    { top: '15%', left: '65%', color: 'bg-neon-yellow', size: 'w-44 h-44' },
+    { top: '85%', left: '80%', color: 'bg-neon-purple', size: 'w-52 h-52' },
+    { top: '50%', left: '90%', color: 'bg-neon-green', size: 'w-28 h-28' }
+  ]);
+
+  useEffect(() => {
+    const updatePositions = () => {
+      setGlowPositions(prev => prev.map(glow => ({
+        ...glow,
+        top: `${Math.random() * 80 + 10}%`,  // Keep within 10-90% of viewport
+        left: `${Math.random() * 80 + 10}%`
+      })));
+    };
+
+    const interval = setInterval(updatePositions, 4000); // Change positions every 4 seconds
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <>
+      {glowPositions.map((glow, index) => (
+        <div
+          key={index}
+          className={`fixed ${glow.color} opacity-10 blur-3xl transition-all duration-3000 ease-in-out ${glow.size} rounded-full`}
+          style={{
+            top: glow.top,
+            left: glow.left
+          }}
+        />
+      ))}
+    </>
+  );
+};
+
+// Neon decorative elements
+const NeonDecorations = () => (
+  <>
+    {/* Left Border */}
+    <div className="fixed top-0 left-0 w-8 h-screen bg-gradient-to-r from-neon-pink/50 to-transparent" />
+    <div className="fixed top-0 left-8 w-1 h-screen bg-neon-pink animate-pulse" />
+
+    {/* Right Border */}
+    <div className="fixed top-0 right-0 w-8 h-screen bg-gradient-to-l from-neon-blue/50 to-transparent" />
+    <div className="fixed top-0 right-8 w-1 h-screen bg-neon-blue animate-pulse" />
+
+    {/* Top Border */}
+    <div className="fixed top-0 left-0 w-screen h-8 bg-gradient-to-b from-neon-yellow/50 to-transparent" />
+    <div className="fixed top-8 left-0 w-screen h-1 bg-neon-yellow animate-pulse" />
+
+    {/* Bottom Border */}
+    <div className="fixed bottom-0 left-0 w-screen h-8 bg-gradient-to-t from-neon-purple/50 to-transparent" />
+    <div className="fixed bottom-8 left-0 w-screen h-1 bg-neon-purple animate-pulse" />
+
+    {/* Corner Accents */}
+    <div className="fixed top-4 left-4 w-16 h-16 border-t-4 border-l-4 border-neon-pink animate-pulse" />
+    <div className="fixed top-4 right-4 w-16 h-16 border-t-4 border-r-4 border-neon-blue animate-pulse" />
+    <div className="fixed bottom-4 left-4 w-16 h-16 border-b-4 border-l-4 border-neon-yellow animate-pulse" />
+    <div className="fixed bottom-4 right-4 w-16 h-16 border-b-4 border-r-4 border-neon-purple animate-pulse" />
+
+    {/* Background Glow */}
+    <BackgroundGlow />
+  </>
+);
 
 export default function Home() {
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <main className="min-h-screen p-8 relative">
+      <NeonDecorations />
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      {/* Hero Section */}
+      <div className="text-center mb-16 mt-8 relative">
+        <div className="absolute inset-0 bg-black/50 blur-xl -z-10" />
+        <h1 className="font-press-start text-4xl md:text-6xl mb-4 neon-text">
+          BREAD HEADS
+          <span className="block mt-2 text-3xl md:text-5xl text-neon-pink">ARCADE</span>
+        </h1>
+        <p className="font-vt323 text-xl md:text-2xl mt-4 text-neon-blue animate-pulse">
+          Powered by $CRUMBS
+        </p>
+        <div className="mt-8 space-y-2">
+          <p className="font-vt323 text-2xl text-neon-yellow animate-textFlicker">
+            INSERT COIN TO PLAY
+          </p>
+          <p className="font-vt323 text-lg text-gray-400">
+            Your Gateway to Retro Gaming Excellence
+          </p>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
+      </div>
+
+      {/* Games Grid */}
+      <div className="max-w-7xl mx-auto relative">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {games.map((game, index) => (
+            <div
+              key={index}
+              className="relative group pixel-border bg-gray-900/80 p-6 transition-all duration-300 hover:transform hover:scale-105 backdrop-blur-sm"
+            >
+              <div className="aspect-video relative mb-4 overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent z-10" />
+                <Image
+                  src={game.imageUrl}
+                  alt={game.title}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <h3 className="font-press-start text-lg mb-2 neon-text">
+                {game.title}
+              </h3>
+              <p className="font-vt323 text-xl text-gray-300 mb-4">
+                {game.description}
+              </p>
+              {game.comingSoon ? (
+                <span className="font-press-start text-sm text-neon-yellow animate-pulse">
+                  Coming Soon
+                </span>
+              ) : (
+                <Link href="#" className="arcade-btn inline-block">
+                  Play Now
+                </Link>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Footer */}
+      <footer className="mt-16 text-center font-vt323 text-xl relative">
+        <div className="absolute inset-0 bg-black/30 blur-xl -z-10" />
+        <p className="text-neon-blue animate-pulse">
+          © 2024 Bread Heads NFT
+        </p>
+        <p className="text-gray-400 mt-2">
+          All rights reserved
+        </p>
       </footer>
-    </div>
+    </main>
   );
 }
