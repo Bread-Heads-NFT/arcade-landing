@@ -6,22 +6,25 @@ import { useEffect, useState } from "react";
 
 const games = [
   {
-    title: "Game 1",
-    description: "Coming Soon",
-    imageUrl: "/placeholder.png",
-    comingSoon: true
+    title: "Platformer",
+    description: "A basic bread platformer, compatible with Phantom.",
+    imageUrl: "/platformer.png",
+    comingSoon: false,
+    link: "https://adventure.breadheads.io/"
   },
   {
     title: "Game 2",
     description: "Coming Soon",
     imageUrl: "/placeholder.png",
-    comingSoon: true
+    comingSoon: true,
+    link: "#"
   },
   {
     title: "Game 3",
     description: "Coming Soon",
     imageUrl: "/placeholder.png",
-    comingSoon: true
+    comingSoon: true,
+    link: "#"
   },
 ];
 
@@ -133,12 +136,13 @@ export default function Home() {
               className="relative group pixel-border bg-gray-900/80 p-6 transition-all duration-300 hover:transform hover:scale-105 backdrop-blur-sm"
             >
               <div className="aspect-video relative mb-4 overflow-hidden">
-                <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent z-10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
                 <Image
                   src={game.imageUrl}
                   alt={game.title}
                   fill
                   className="object-cover"
+                  priority={index === 0}
                 />
               </div>
               <h3 className="font-press-start text-lg mb-2 neon-text">
@@ -152,7 +156,10 @@ export default function Home() {
                   Coming Soon
                 </span>
               ) : (
-                <Link href="#" className="arcade-btn inline-block">
+                <Link
+                  href={game.link}
+                  className="arcade-btn inline-block"
+                >
                   Play Now
                 </Link>
               )}
@@ -165,7 +172,7 @@ export default function Home() {
       <footer className="mt-16 text-center font-vt323 text-xl relative">
         <div className="absolute inset-0 bg-black/30 blur-xl -z-10" />
         <p className="text-neon-blue animate-pulse">
-          © 2024 Bread Heads NFT
+          © 2025 Bread Heads NFT
         </p>
         <p className="text-gray-400 mt-2">
           All rights reserved
