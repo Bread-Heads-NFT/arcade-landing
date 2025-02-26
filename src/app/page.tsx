@@ -13,11 +13,11 @@ const games = [
     link: "https://adventure.breadheads.io/"
   },
   {
-    title: "Game 2",
-    description: "Coming Soon",
-    imageUrl: "/placeholder.png",
-    comingSoon: true,
-    link: "#"
+    title: "Text Adventure",
+    description: "A text adventure game where you play a sentient baguette who must escape from a french restaurant.",
+    imageUrl: "/zork.png",
+    comingSoon: false,
+    link: "https://zork.breadheads.io/"
   },
   {
     title: "Game 3",
