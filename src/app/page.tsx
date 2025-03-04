@@ -20,9 +20,9 @@ const games = [
     link: "https://zork.breadheads.io/"
   },
   {
-    title: "Game 3",
-    description: "Coming Soon",
-    imageUrl: "/placeholder.png",
+    title: "Let's Get Toasty",
+    description: "A game where you need to catch the toast before it hits the floor.",
+    imageUrl: "/toast.png",
     comingSoon: true,
     link: "#"
   },
