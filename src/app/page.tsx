@@ -23,8 +23,8 @@ const games = [
     title: "Let's Get Toasty",
     description: "A game where you need to catch the toast before it hits the floor.",
     imageUrl: "/toast.png",
-    comingSoon: true,
-    link: "#"
+    comingSoon: false,
+    link: "https://cardboardcabin.github.io/Toasty/"
   },
 ];
 

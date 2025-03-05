@@ -17,6 +17,35 @@ const vt323 = VT323({
 export const metadata: Metadata = {
   title: "Bread Heads Arcade | Powered by $CRUMBS",
   description: "Welcome to the Bread Heads Arcade - Your retro gaming destination in the world of NFTs",
+  icons: {
+    icon: '/favicon.png',
+    apple: '/apple-icon.png',
+  },
+  themeColor: '#ff00ff', // Neon pink theme color
+  manifest: '/manifest.json',
+  openGraph: {
+    title: 'Bread Heads Arcade | Powered by $CRUMBS',
+    description: 'Your Gateway to Retro Gaming Excellence in the world of NFTs',
+    url: 'https://arcade.breadheads.io',
+    siteName: 'Bread Heads Arcade',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'Bread Heads Arcade',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Bread Heads Arcade | Powered by $CRUMBS',
+    description: 'Your Gateway to Retro Gaming Excellence in the world of NFTs',
+    images: ['/twitter-image.png'],
+    creator: '@BreadHeadsNFT',
+  },
 };
 
 export default function RootLayout({
