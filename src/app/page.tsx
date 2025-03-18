@@ -26,6 +26,13 @@ const games = [
     comingSoon: false,
     link: "https://cardboardcabin.github.io/Toasty/"
   },
+  {
+    title: "Degen Trail",
+    description: "You are about to embark on the journey to launch the next 1000x memecoin.",
+    imageUrl: "/degentrail.png",
+    comingSoon: false,
+    link: "https://trail.breadheads.io/"
+  }
 ];
 
 // Background Glow Component
