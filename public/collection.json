@@ -1,0 +1,14 @@
+{
+    "name": "Bread Heads Arcade",
+    "description": "Collection for Bread Heads Arcade NFTs.",
+    "image": "https://raw.githubusercontent.com/Bread-Heads-NFT/arcade-landing/refs/heads/main/public/collection.png",
+    "external_url": "https://arcade.breadheads.io/",
+    "properties": {
+        "files": [
+            {
+                "uri": "https://raw.githubusercontent.com/Bread-Heads-NFT/arcade-landing/refs/heads/main/public/collection.png",
+                "type": "image/png"
+            }
+        ]
+    }
+}
