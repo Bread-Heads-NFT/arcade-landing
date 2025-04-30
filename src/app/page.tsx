@@ -178,9 +178,11 @@ export default function Home() {
     try {
       console.log('Starting mint process...');
 
+      const authority = process.env.NEXT_PUBLIC_ARCADE_AUTHORITY!;
       await initializePlayer(umi, {
         player: generateSigner(umi),
         tokenMint: publicKey(process.env.NEXT_PUBLIC_TOKEN_MINT as string),
+        authority: publicKey(authority),
         name: username.trim(),
         uri: "https://raw.githubusercontent.com/Bread-Heads-NFT/arcade-landing/refs/heads/main/public/asset.json"
       }).sendAndConfirm(umi, { confirm: { commitment: 'finalized' } });
