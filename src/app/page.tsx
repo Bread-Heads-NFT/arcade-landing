@@ -3,6 +3,16 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { WalletConnectButton } from "@/components/WalletConnectButton";
+import { NftGate } from "@/components/NftGate";
+import { MintButton } from "@/components/MintButton";
+import { UsernameInput } from "@/components/UsernameInput";
+import { initializePlayer } from "@breadheads/bgl-insert-coin";
+import { useUmi } from "@/components/useUmi";
+import { generateSigner, publicKey } from "@metaplex-foundation/umi";
+import { NftDisplay } from '@/components/NftDisplay';
+import { AssetV1 } from "@metaplex-foundation/mpl-core";
+import { DasApiAssetContent } from "@metaplex-foundation/digital-asset-standard-api";
 
 const games = [
   {
@@ -10,28 +20,40 @@ const games = [
     description: "A basic bread platformer, compatible with Phantom.",
     imageUrl: "/platformer.png",
     comingSoon: false,
-    link: "https://adventure.breadheads.io/"
+    link: "https://adventure.breadheads.io/",
+    arcadeProtocolCompatible: false
   },
   {
     title: "Text Adventure",
     description: "A text adventure game where you play a sentient baguette who must escape from a french restaurant.",
     imageUrl: "/zork.png",
     comingSoon: false,
-    link: "https://zork.breadheads.io/"
+    link: "https://zork.breadheads.io/",
+    arcadeProtocolCompatible: false
   },
   {
     title: "Let's Get Toasty",
     description: "A game where you need to catch the toast before it hits the floor.",
     imageUrl: "/toast.png",
     comingSoon: false,
-    link: "https://cardboardcabin.github.io/Toasty/"
+    link: "https://cardboardcabin.github.io/Toasty/",
+    arcadeProtocolCompatible: false
   },
   {
     title: "Degen Trail",
     description: "You are about to embark on the journey to launch the next 1000x memecoin.",
     imageUrl: "/degentrail.png",
     comingSoon: false,
-    link: "https://trail.breadheads.io/"
+    link: "https://trail.breadheads.io/",
+    arcadeProtocolCompatible: false
+  },
+  {
+    title: "Crypto Clicker",
+    description: "Click as many times as you can!",
+    imageUrl: "/cryptoclicker.png",
+    comingSoon: false,
+    link: "https://click.breadheads.io/",
+    arcadeProtocolCompatible: true
   }
 ];
 
@@ -109,7 +131,71 @@ const NeonDecorations = () => (
   </>
 );
 
+// Toast component
+const Toast = ({ message, show }: { message: string; show: boolean }) => {
+  if (!show) return null;
+  return (
+    <div className="fixed bottom-4 right-4 bg-black/90 border border-neon-green text-neon-green px-4 py-2 rounded-md font-vt323 text-sm z-50 animate-fadeInOut">
+      {message}
+    </div>
+  );
+};
+
 export default function Home() {
+  const umi = useUmi();
+  const [hasNft, setHasNft] = useState<boolean | null>(null);
+  const [nftData, setNftData] = useState<{ nft: AssetV1, content: DasApiAssetContent } | null>(null);
+  const [isMinting, setIsMinting] = useState(false);
+  const [username, setUsername] = useState('');
+  const [resetTrigger, setResetTrigger] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [showToast, setShowToast] = useState(false);
+
+  const showToastMessage = (message: string) => {
+    setToastMessage(message);
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
+  };
+
+  const handleNftFound = (nft: AssetV1, content: DasApiAssetContent) => {
+    setHasNft(true);
+    setNftData({ nft, content });
+  };
+
+  const handleNoNft = () => {
+    setHasNft(false);
+    setNftData(null);
+  };
+
+  const handleUsernameChange = (newUsername: string) => {
+    setUsername(newUsername);
+  };
+
+  const handleMintClick = async () => {
+    if (isMinting || !username.trim()) return; // Prevent minting without username
+
+    setIsMinting(true);
+    try {
+      console.log('Starting mint process...');
+
+      await initializePlayer(umi, {
+        player: generateSigner(umi),
+        tokenMint: publicKey(process.env.NEXT_PUBLIC_TOKEN_MINT as string),
+        name: username.trim(),
+        uri: "https://raw.githubusercontent.com/Bread-Heads-NFT/arcade-landing/refs/heads/main/public/asset.json"
+      }).sendAndConfirm(umi, { confirm: { commitment: 'finalized' } });
+
+      console.log('Mint completed successfully');
+      // Trigger NFT check refresh
+      setResetTrigger(prev => !prev);
+    } catch (error) {
+      console.error('Minting failed:', error);
+      // Handle error (show error message, etc.)
+    } finally {
+      setIsMinting(false);
+    }
+  };
+
   return (
     <main className="min-h-screen p-8 relative">
       <NeonDecorations />
@@ -131,6 +217,23 @@ export default function Home() {
           <p className="font-vt323 text-lg text-gray-400">
             Your Gateway to Retro Gaming Excellence
           </p>
+          <WalletConnectButton />
+          <NftGate onNftFound={handleNftFound} onNoNft={handleNoNft} resetTrigger={resetTrigger} />
+          {hasNft === true && nftData && (
+            <NftDisplay nftData={nftData} />
+          )}
+          {hasNft === false && (
+            <>
+              <UsernameInput
+                onUsernameChange={handleUsernameChange}
+                disabled={isMinting}
+              />
+              <MintButton
+                onClick={handleMintClick}
+                disabled={isMinting}
+              />
+            </>
+          )}
         </div>
       </div>
 
@@ -151,6 +254,26 @@ export default function Home() {
                   className="object-cover"
                   priority={index === 0}
                 />
+                {game.arcadeProtocolCompatible && (
+                  <div className="absolute top-2 right-2 flex flex-col items-end gap-1">
+                    <div className="bg-black/80 border border-neon-blue text-neon-blue px-2 py-1 rounded-md font-press-start text-xs z-20 shadow-lg">
+                      🎮 Arcade Protocol 🕹️
+                    </div>
+                    {nftData && (
+                      <button
+                        onClick={() => {
+                          const referralLink = `${game.link}?referrer=${nftData.nft.publicKey}`;
+                          navigator.clipboard.writeText(referralLink);
+                          showToastMessage('Referral link copied to clipboard!');
+                        }}
+                        className="bg-black/80 border border-neon-blue text-neon-blue px-2 py-1 rounded-md font-vt323 text-xs z-20 shadow-lg hover:text-neon-pink transition-colors flex items-center gap-1"
+                      >
+                        <span>📋</span>
+                        <span>Referral Link</span>
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
               <h3 className="font-press-start text-lg mb-2 neon-text">
                 {game.title}
@@ -164,7 +287,7 @@ export default function Home() {
                 </span>
               ) : (
                 <Link
-                  href={game.link}
+                  href={`${game.link}${nftData ? `?nft=${nftData.nft.publicKey}` : ''}`}
                   className="arcade-btn inline-block"
                 >
                   Play Now
@@ -185,6 +308,9 @@ export default function Home() {
           All rights reserved
         </p>
       </footer>
+
+      {/* Toast Notification */}
+      <Toast message={toastMessage} show={showToast} />
     </main>
   );
 }
