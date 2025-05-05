@@ -309,6 +309,9 @@ export default function Home() {
         <p className="text-gray-400 mt-2">
           All rights reserved
         </p>
+        <Link href="/docs" className="text-neon-pink hover:text-neon-blue transition-colors mt-4 inline-block">
+          Documentation
+        </Link>
       </footer>
 
       {/* Toast Notification */}
