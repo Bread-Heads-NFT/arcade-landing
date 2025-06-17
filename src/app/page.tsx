@@ -54,6 +54,14 @@ const games = [
     comingSoon: false,
     link: "https://click.breadheads.io/",
     arcadeProtocolCompatible: true
+  },
+  {
+    title: "Crumb Catcher",
+    description: "Catch as many crumbs as you can!",
+    imageUrl: "/flappy.png",
+    comingSoon: false,
+    link: "https://flap.breadheads.io/",
+    arcadeProtocolCompatible: true
   }
 ];
 
