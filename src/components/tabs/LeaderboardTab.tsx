@@ -110,7 +110,7 @@ export function LeaderboardTab() {
               </tr>
             </thead>
             <tbody>
-              {sortedData.map((entry, index) => (
+              {sortedData.map((entry) => (
                 <tr 
                   key={entry.name} 
                   className={`

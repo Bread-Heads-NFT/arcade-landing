@@ -29,7 +29,7 @@ export function ProfileTab({ nftData }: ProfileTabProps) {
       setReferralBalance(referralBalance);
     }
     fetchReferralBalance();
-  }, [umi, nftData?.nft.publicKey]);
+  }, [umi, nftData]);
 
   const handleClaim = async () => {
     if (isClaiming || !nftData) return;
