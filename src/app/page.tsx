@@ -10,7 +10,7 @@ import { UsernameInput } from "@/components/UsernameInput";
 import { initializePlayer } from "@breadheads/bgl-insert-coin";
 import { useUmi } from "@/components/useUmi";
 import { generateSigner, publicKey } from "@metaplex-foundation/umi";
-import { NftDisplay } from '@/components/NftDisplay';
+import { ArcadeTabs } from '@/components/ArcadeTabs';
 import { AssetV1 } from "@metaplex-foundation/mpl-core";
 import { DasApiAssetContent } from "@metaplex-foundation/digital-asset-standard-api";
 
@@ -229,9 +229,6 @@ export default function Home() {
           </p>
           <WalletConnectButton />
           <NftGate onNftFound={handleNftFound} onNoNft={handleNoNft} resetTrigger={resetTrigger} />
-          {hasNft === true && nftData && (
-            <NftDisplay nftData={nftData} />
-          )}
           {hasNft === false && (
             <>
               <UsernameInput
@@ -246,6 +243,13 @@ export default function Home() {
           )}
         </div>
       </div>
+
+      {/* Arcade Tabs - Show when user has NFT */}
+      {hasNft === true && nftData && (
+        <div className="max-w-7xl mx-auto mb-16">
+          <ArcadeTabs nftData={nftData} />
+        </div>
+      )}
 
       {/* Games Grid */}
       <div className="max-w-7xl mx-auto relative">
