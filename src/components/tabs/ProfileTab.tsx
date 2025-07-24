@@ -19,26 +19,20 @@ export function ProfileTab({ nftData }: ProfileTabProps) {
   const [isClaiming, setIsClaiming] = useState(false);
   const [referralBalance, setReferralBalance] = useState<SolAmount>(lamports(0));
 
-  if (!nftData) {
-    return (
-      <div className="text-center py-12">
-        <div className="bg-gray-800/50 rounded-lg p-8 max-w-md mx-auto">
-          <h3 className="font-press-start text-neon-yellow text-lg mb-4">No Profile Found</h3>
-          <p className="font-vt323 text-gray-300 text-lg">
-            Connect your wallet and mint your player NFT to view your profile.
-          </p>
-        </div>
-      </div>
-    );
-  }
-
-  let playerStats: PlayerStats | null = null;
-  if (nftData.nft.linkedAppDatas) {
-    playerStats = getPlayerStatsSerializer().deserialize(nftData.nft.linkedAppDatas[0].data)[0];
-  }
+  // Move useEffect before any early returns
+  useEffect(() => {
+    if (!nftData) return;
+    
+    const fetchReferralBalance = async () => {
+      const assetSigner = findAssetSignerPda(umi, { asset: nftData.nft.publicKey });
+      const referralBalance = await umi.rpc.getBalance(publicKey(assetSigner));
+      setReferralBalance(referralBalance);
+    }
+    fetchReferralBalance();
+  }, [umi, nftData?.nft.publicKey]);
 
   const handleClaim = async () => {
-    if (isClaiming) return;
+    if (isClaiming || !nftData) return;
     setIsClaiming(true);
     try {
       const asset = await fetchAsset(umi, nftData.nft.publicKey);
@@ -67,22 +61,29 @@ export function ProfileTab({ nftData }: ProfileTabProps) {
     }
   };
 
-  useEffect(() => {
-    if (!nftData) return;
-    
-    const fetchReferralBalance = async () => {
-      const assetSigner = findAssetSignerPda(umi, { asset: nftData.nft.publicKey });
-      const referralBalance = await umi.rpc.getBalance(publicKey(assetSigner));
-      setReferralBalance(referralBalance);
-    }
-    fetchReferralBalance();
-  }, [umi, nftData?.nft.publicKey]);
-
   const formatTimestamp = (timestamp: bigint | number) => {
     if (Number(timestamp) === 0) return 'Never';
     const date = new Date(Number(timestamp) * 1000);
     return date.toLocaleDateString();
   };
+
+  if (!nftData) {
+    return (
+      <div className="text-center py-12">
+        <div className="bg-gray-800/50 rounded-lg p-8 max-w-md mx-auto">
+          <h3 className="font-press-start text-neon-yellow text-lg mb-4">No Profile Found</h3>
+          <p className="font-vt323 text-gray-300 text-lg">
+            Connect your wallet and mint your player NFT to view your profile.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  let playerStats: PlayerStats | null = null;
+  if (nftData.nft.linkedAppDatas) {
+    playerStats = getPlayerStatsSerializer().deserialize(nftData.nft.linkedAppDatas[0].data)[0];
+  }
 
   return (
     <div className="space-y-6">
